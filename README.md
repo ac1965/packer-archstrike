@@ -19,7 +19,7 @@ I had simplicity in mind when creating this box. It has the following features.
 Build instructions
 ------------------
 ~~~
-$ git clone git@github.com:ac1965/archstrike-vm.git
+$ git clone https://github.com/ac1965/packer-archstrike.git
 $ cd archstrike-vm/vagrant
 $ make
 ~~~
