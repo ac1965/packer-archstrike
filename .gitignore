@@ -1,0 +1,6 @@
+*.swp
+vagrant_cache
+output*
+.vagrant
+packer_cache
+testing

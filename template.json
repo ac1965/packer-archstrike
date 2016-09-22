@@ -1,0 +1,68 @@
+{
+    "builders": [
+        {
+            "type": "virtualbox-iso",
+            "guest_os_type": "ArchLinux_64",
+            "headless": true,
+            "iso_url": "{{user `iso_url`}}",
+            "iso_checksum": "{{user `iso_checksum`}}",
+            "iso_checksum_type": "{{user `iso_checksum_type`}}",
+            "ssh_username": "root",
+            "ssh_password": "vagrant",
+            "ssh_timeout": "1000000s",
+            "boot_command":["<enter><wait10><wait10><wait10>",
+                            "/usr/bin/curl http://{{ .HTTPIP }}:{{ .HTTPPort }}/scripts/install.sh",
+                            "| bash<enter>"],
+            "http_directory": ".",
+            "disk_size": 20480,
+            "shutdown_command": "shutdown now",
+            "guest_additions_mode": "disable",
+            "vboxmanage": [
+                [
+                    "modifyvm",
+                    "{{.Name}}",
+                    "--memory",
+                    "{{user `memory`}}"
+                ],
+                [
+                    "modifyvm",
+                    "{{.Name}}",
+                    "--cpus",
+                    "{{user `cpus`}}"
+                ],
+                [
+                    "modifyvm",
+                    "{{.Name}}",
+                    "--rtcuseutc",
+                    "on"
+                ]
+            ],
+            "virtualbox_version_file": ".vbox_version"
+        }
+    ],
+    "provisioners": [
+        {
+            "type": "shell",
+            "scripts": [
+                "scripts/provision.sh",
+                "scripts/archstrike-setup.sh"
+            ]
+        }
+    ],
+    "post-processors": [
+        [
+            {
+                "keep_input_artifact": true,
+                "output": "output/archstrike_{{.Provider}}.box",
+                "type": "vagrant"
+            }
+        ]
+    ],
+    "variables": {
+        "cpus": "1",
+        "iso_checksum": "bcec1d7c69f9c4200f34408e1af84bc3118801ff",
+        "iso_checksum_type": "sha1",
+        "iso_url": "http://ftp.jaist.ac.jp/pub/Linux/ArchLinux/iso/2016.09.03/archlinux-2016.09.03-dual.iso",
+        "memory": "1024"
+    }
+}
