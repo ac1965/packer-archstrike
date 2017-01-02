@@ -44,9 +44,19 @@ fi
 
 pacman-db-upgrade
 sync
-pacman -Syu --noconfirm --needed sudo git gdb python rsync unzip vim yaourt
+pacman -Syu --noconfirm --needed \
+	linux-grsec linux-grsec-headers \
+	sudo git gdb rsync unzip vim wget yaourt \
+	bzr dnsutils inetutils ltrace strace mercurial net-tools openvpn \
+	proxychains-ng \
+	python python2 python-pip python2-pip ruby subversion \
+	tcpdump tor \
+	adobe-source-code-pro-fonts adobe-source-sans-pro-fonts \
+	ttf-inconsolata \
+	firefox fontforge geany openbox python-numpy pyxdg rdesktop \
+	x11vnc xorg xterm
 echo -e '\ny\ny\n' | pacman -S multilib-devel && echo -e '\r'
-sudo -u vagrant /usr/bin/yaourt -S --noconfirm zsh
+sudo -u vagrant /usr/bin/yaourt -S --noconfirm zsh otf-takao ttf-ms-fonts
 sync
 
 # add vagrant user to sudoers list

@@ -3,7 +3,7 @@
         {
             "type": "virtualbox-iso",
             "guest_os_type": "ArchLinux_64",
-            "headless": true,
+            "headless": false,
             "iso_url": "{{user `iso_url`}}",
             "iso_checksum": "{{user `iso_checksum`}}",
             "iso_checksum_type": "{{user `iso_checksum_type`}}",
@@ -60,9 +60,9 @@
     ],
     "variables": {
         "cpus": "1",
-        "iso_checksum": "bcec1d7c69f9c4200f34408e1af84bc3118801ff",
+        "iso_checksum": "1acb685c9a9f2df6eef15d2fc3e8e93edc33c9da",
         "iso_checksum_type": "sha1",
-        "iso_url": "http://ftp.jaist.ac.jp/pub/Linux/ArchLinux/iso/2016.09.03/archlinux-2016.09.03-dual.iso",
+        "iso_url": "http://ftp.jaist.ac.jp/pub/Linux/ArchLinux/iso/2017.01.01/archlinux-2017.01.01-dual.iso",
         "memory": "1024"
     }
 }
