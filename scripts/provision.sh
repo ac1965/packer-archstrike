@@ -25,12 +25,15 @@ chmod 600 /home/vagrant/.ssh/authorized_keys
 chown vagrant:vagrant /home/vagrant/.ssh/authorized_keys
 
 # pacman
+pacm-db-upgrade
+sync
 if [[ $(uname -m) == "x86_64" ]]; then
     sed -i '/\[multilib\]/{N;d}' /etc/pacman.conf
     cat >> "/etc/pacman.conf" <<EOF
 [multilib]
 Include = /etc/pacman.d/mirrorlist
 EOF
+    echo -e '\ny\ny\n' | pacman -S multilib-devel && echo -e '\r'
 fi
 
 # yaourt
@@ -42,8 +45,6 @@ Server = http://repo.archlinux.fr/\$arch
 EOF
 fi
 
-pacman-db-upgrade
-sync
 pacman -Syu --noconfirm --needed \
 	linux-grsec linux-grsec-headers \
 	sudo git gdb rsync unzip vim wget yaourt \
@@ -53,18 +54,27 @@ pacman -Syu --noconfirm --needed \
 	tcpdump tor \
 	adobe-source-code-pro-fonts adobe-source-sans-pro-fonts \
 	ttf-inconsolata \
-	firefox fontforge geany openbox python-numpy pyxdg rdesktop \
-	x11vnc xorg xterm
-echo -e '\ny\ny\n' | pacman -S multilib-devel && echo -e '\r'
+	firefox fontforge geany mate openbox python-numpy pyxdg rdesktop \
+	x11vnc xorg xterm lxterminal network-manager-applet \
+	networkmanager slim slim-themes
 sudo -u vagrant /usr/bin/yaourt -S --noconfirm zsh otf-takao ttf-ms-fonts
 sync
+
+systemctl enable slim.service
 
 # add vagrant user to sudoers list
 echo "vagrant ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers.d/vagrant
 
-# install virtualbox guest additions
-pacman -S virtualbox-guest-modules-arch virtualbox-guest-utils-nox --noconfirm
+# # install virtualbox guest additions
+# pacman -S virtualbox-guest-modules-arch virtualbox-guest-utils-nox --noconfirm
+pacman -S virtualbox-guest-utils-nox --noconfirm
 
-# load virtualbox guest addition modules
-printf "vboxguest\nvboxsf\nvboxvideo\n" > /etc/modules-load.d/virtualbox.conf
+# # load virtualbox guest addition modules
+# printf "vboxguest\nvboxsf\nvboxvideo\n" > /etc/modules-load.d/virtualbox.conf
+systemctl enable vboxservice
 
+# 
+su - vagrant -c "\
+git clone https://github.com/ac1965/vagrant-dotfiles.git --recursive && \
+	cd vagrant-dotfiles && ./setup.sh
+"
