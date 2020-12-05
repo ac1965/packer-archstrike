@@ -1,68 +1,70 @@
 {
-    "builders": [
-        {
-            "type": "virtualbox-iso",
-            "guest_os_type": "ArchLinux_64",
-            "headless": false,
-            "iso_url": "{{user `iso_url`}}",
-            "iso_checksum": "{{user `iso_checksum`}}",
-            "iso_checksum_type": "{{user `iso_checksum_type`}}",
-            "ssh_username": "root",
-            "ssh_password": "vagrant",
-            "ssh_timeout": "1000000s",
-            "boot_command":["<enter><wait10><wait10><wait10>",
-                            "/usr/bin/curl http://{{ .HTTPIP }}:{{ .HTTPPort }}/scripts/install.sh",
-                            "| bash<enter>"],
-            "http_directory": ".",
-            "disk_size": 20480,
-            "shutdown_command": "shutdown now",
-            "guest_additions_mode": "disable",
-            "vboxmanage": [
-                [
-                    "modifyvm",
-                    "{{.Name}}",
-                    "--memory",
-                    "{{user `memory`}}"
-                ],
-                [
-                    "modifyvm",
-                    "{{.Name}}",
-                    "--cpus",
-                    "{{user `cpus`}}"
-                ],
-                [
-                    "modifyvm",
-                    "{{.Name}}",
-                    "--rtcuseutc",
-                    "on"
-                ]
-            ],
-            "virtualbox_version_file": ".vbox_version"
-        }
-    ],
-    "provisioners": [
-        {
-            "type": "shell",
-            "scripts": [
-                "scripts/provision.sh",
-                "scripts/archstrike-setup.sh"
-            ]
-        }
-    ],
-    "post-processors": [
+  "builders": [
+    {
+      "boot_command": [
+        "<enter><wait10><wait10><wait10>",
+        "/usr/bin/curl http://{{ .HTTPIP }}:{{ .HTTPPort }}/scripts/install.sh",
+        "| bash<enter>"
+      ],
+      "disk_size": 20480,
+      "guest_additions_mode": "disable",
+      "guest_os_type": "ArchLinux_64",
+      "headless": false,
+      "http_directory": ".",
+      "iso_checksum": "{{user `iso_checksum_type`}}:{{user `iso_checksum`}}",
+      "iso_url": "{{user `iso_url`}}",
+      "shutdown_command": "shutdown now",
+      "ssh_password": "vagrant",
+      "ssh_timeout": "1000000s",
+      "ssh_username": "root",
+      "type": "virtualbox-iso",
+      "vboxmanage": [
         [
-            {
-                "keep_input_artifact": true,
-                "output": "output/archstrike_{{.Provider}}.box",
-                "type": "vagrant"
-            }
+          "modifyvm",
+          "{{.Name}}",
+          "--memory",
+          "{{user `memory`}}"
+        ],
+        [
+          "modifyvm",
+          "{{.Name}}",
+          "--cpus",
+          "{{user `cpus`}}"
+        ],
+        [
+          "modifyvm",
+          "{{.Name}}",
+          "--rtcuseutc",
+          "on"
         ]
-    ],
-    "variables": {
-        "cpus": "1",
-        "iso_checksum": "1acb685c9a9f2df6eef15d2fc3e8e93edc33c9da",
-        "iso_checksum_type": "sha1",
-        "iso_url": "http://ftp.jaist.ac.jp/pub/Linux/ArchLinux/iso/2017.01.01/archlinux-2017.01.01-dual.iso",
-        "memory": "1024"
+      ],
+      "virtualbox_version_file": ".vbox_version"
     }
+  ],
+  "post-processors": [
+    [
+      {
+        "keep_input_artifact": true,
+        "output": "output/archstrike_{{.Provider}}.box",
+        "type": "vagrant"
+      }
+    ]
+  ],
+  "provisioners": [
+    {
+      "scripts": [
+        "scripts/provision.sh",
+        "scripts/archstrike-setup.sh"
+      ],
+      "type": "shell"
+    }
+  ],
+  "variables": {
+    "cpus": "1",
+    "iso_checksum_type": "sha1",
+    "iso_checksum": "aea95a15c9f034d10e665247cfe782bccb5b306e",
+    "iso_url": "http://ftp.jaist.ac.jp/pub/Linux/ArchLinux/iso/2020.12.01/archlinux-2020.12.01-x86_64.iso",
+    "memory": "1024"
+  }
 }
+
